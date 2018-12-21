@@ -31,6 +31,8 @@
 #include <robottools.h>
 #include <robot.h>
 
+#include <iostream>
+
 static tTrack	*curTrack;
 
 static void initTrack(int index, tTrack* track, void *carHandle, void **carParmHandle, tSituation *s); 
@@ -93,9 +95,44 @@ newrace(int index, tCarElt* car, tSituation *s)
 static void  
 drive(int index, tCarElt* car, tSituation *s) 
 { 
-    memset((void *)&car->ctrl, 0, sizeof(tCarCtrl)); 
-    car->ctrl.brakeCmd = 1.0; /* all brakes on ... */ 
-    /*  
+	memset((void *)&car->ctrl, 0, sizeof(tCarCtrl));
+
+	car->ctrl.gear = 1;
+
+	if (car->pub.speed > 15)
+	{
+		car->ctrl.gear = 2;
+	}if (car->pub.speed > 40)
+	{
+		car->ctrl.gear = 3;
+	}if (car->pub.speed > 60)
+	{
+		car->ctrl.gear = 4;
+	}if(car->pub.speed > 80)
+	{
+		car->ctrl.gear = 5;
+	}if(car->pub.speed > 100)
+	{
+		car->ctrl.gear = 6;
+	}
+
+    car->ctrl.accelCmd = 1.0;
+	if(car->pub.trkPos.toMiddle > 0)
+	{
+		car->ctrl.steer = -0.2;
+	}
+	else
+	{
+		car->ctrl.steer = 0.2;
+	}
+	std::cout << "-----------------------" << std::endl;
+	std::cout << car->pub.trkPos.toMiddle << std::endl;
+	std::cout << car->pub.speed << std::endl;
+	std::cout << "-----------------------" << std::endl;
+
+	
+
+    /* 
      * add the driving code here to modify the 
      * car->_steerCmd 
      * car->_accelCmd 

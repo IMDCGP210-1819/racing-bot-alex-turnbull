@@ -91,7 +91,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>tgf.lib;robottools.lib;sg_vs2008_32.lib;ul_vs2008_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>tgf.lib;robottools.lib;sg_vs2008_32.lib;ul_vs2017_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Release/robot_base.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>../../../export/lib;../../windows/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -146,7 +146,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>legacy_stdio_definitions.lib;tgf.lib;robottools.lib;sg_vs2008_32.lib;ul_vs2008_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legacy_stdio_definitions.lib;tgf.lib;robottools.lib;sg_vs2008_32.lib;ul_vs2017_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Debug/robot_base.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>../../../export/libd;../../windows/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
