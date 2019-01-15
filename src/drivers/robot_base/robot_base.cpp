@@ -97,38 +97,65 @@ drive(int index, tCarElt* car, tSituation *s)
 { 
 	memset((void *)&car->ctrl, 0, sizeof(tCarCtrl));
 
-	car->ctrl.gear = 1;
+	//car->ctrl.gear = 1;
 
-	if (car->pub.speed > 15)
+	
+
+ //   car->ctrl.accelCmd = 1.0;
+	//if(car->pub.trkPos.toMiddle > 0)
+	//{
+	//	car->ctrl.steer = -0.1;
+	//}
+	//else
+	//{
+	//	car->ctrl.steer = 0.1;
+	//}
+	//std::cout << "-----------------------" << std::endl;
+	//std::cout << car->pub.trkPos.type << std::endl;
+	//std::cout << car->pub.trkPos.toMiddle << std::endl;
+	//std::cout << car->pub.speed << std::endl;
+	//std::cout << "-----------------------" << std::endl;
+
+	float angle;
+    const float SC = 1.0;
+
+    angle = RtTrackSideTgAngleL(&(car->_trkPos)) - car->_yaw;
+    NORM_PI_PI(angle); // put the angle back in the range from -PI to PI
+    angle -= SC*car->_trkPos.toMiddle/car->_trkPos.seg->width;
+
+    // set up the values to return
+	std::cout << "-----------------------" << std::endl;
+	std::cout << car->_steerLock << std::endl;
+	std::cout << angle << std::endl;
+	std::cout << car->pub.speed << std::endl;
+	std::cout << car->_trkPos.seg->next->arc << std::endl;
+	std::cout << "-----------------------" << std::endl;
+
+	float speed = car->pub.speed;
+
+    car->ctrl.steer = angle / car->_steerLock;
+    car->ctrl.gear = 1; // first gear
+	if (speed > 15)
 	{
 		car->ctrl.gear = 2;
-	}if (car->pub.speed > 40)
+	}if (speed > 30)
 	{
 		car->ctrl.gear = 3;
-	}if (car->pub.speed > 60)
+	}if (speed > 40)
 	{
 		car->ctrl.gear = 4;
-	}if(car->pub.speed > 80)
+	}if(speed > 50)
 	{
 		car->ctrl.gear = 5;
-	}if(car->pub.speed > 100)
+	}if(speed > 60)
 	{
 		car->ctrl.gear = 6;
 	}
-
-    car->ctrl.accelCmd = 1.0;
-	if(car->pub.trkPos.toMiddle > 0)
-	{
-		car->ctrl.steer = -0.2;
-	}
-	else
-	{
-		car->ctrl.steer = 0.2;
-	}
-	std::cout << "-----------------------" << std::endl;
-	std::cout << car->pub.trkPos.toMiddle << std::endl;
-	std::cout << car->pub.speed << std::endl;
-	std::cout << "-----------------------" << std::endl;
+    car->ctrl.accelCmd = 0.5; // 30% accelerator pedal
+	if(speed > 35 && car->_trkPos.seg->next->type == 1)
+		car->ctrl.accelCmd = 0.0;
+		car->ctrl.brakeCmd = 0.3;
+    car->ctrl.brakeCmd = 0.0; // no brakes
 
 	
 
@@ -139,6 +166,7 @@ drive(int index, tCarElt* car, tSituation *s)
      * car->_brakeCmd 
      * car->_gearCmd 
      * car->_clutchCmd 
+	 if (car->priv.enginerpm >= car->priv.enginerpmRedLine)
      */ 
 }
 
