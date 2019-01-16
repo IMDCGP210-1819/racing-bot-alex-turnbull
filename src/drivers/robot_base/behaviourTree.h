@@ -46,5 +46,36 @@ int main() {
 	while (!root->run())
 		std::cout << "--------------------" << std::endl;
 	std::cout << std::endl << "Operation complete.  Behaviour tree exited." << std::endl;
-	std::cin.get();
 }
+
+class Accelerate : public Node {
+public:
+	virtual bool run() override {
+		std::cout << "In Accelerate State" << std::endl;
+		return true;
+	}
+};
+
+class Brake : public Node {
+public:
+	virtual bool run() override {
+		std::cout << "In Brake State" << std::endl;
+		return true;
+	}
+};
+
+class Turn : public Node {
+public:
+	virtual bool run() override {
+		std::cout << "In Turn State" << std::endl;
+		return true;
+	}
+};
+
+class ChangeGear : public Node {
+public:
+	virtual bool run() override {
+		std::cout << "In ChangeGear State" << std::endl;
+		return true;
+	}
+};
