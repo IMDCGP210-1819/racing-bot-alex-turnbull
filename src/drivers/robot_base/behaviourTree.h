@@ -3,6 +3,19 @@
 
 #include "blackboard.h"
 
+static float calculateBraking(float cornerArc)
+{
+	float valueToReturn = cornerArc * 10;
+	return valueToReturn;
+}
+
+static float totalArc()
+{
+	auto car = blackboard::Instance()->car;
+	float value = car->_trkPos.seg->next->arc + car->_trkPos.seg->next->next->arc + car->_trkPos.seg->next->next->next->arc;
+	return value;
+}
+
 class Node {
 public:
 	virtual bool run() = 0;
@@ -45,6 +58,7 @@ public:
 		auto car = blackboard::Instance()->car;
 		
 		car->ctrl.accelCmd = 0.5;
+		car->ctrl.brakeCmd = 0.0;
 
 		return true;
 	}
@@ -56,8 +70,14 @@ public:
 		std::cout << "In Brake State" << std::endl;
 
 		auto car = blackboard::Instance()->car;
+		float speed = car->pub.speed;
 
-		car->ctrl.brakeCmd = 0.5;
+		std::cout << totalArc() << std::endl;
+		if (speed > 35 && car->_trkPos.seg->next->type != TR_STR)
+		{
+			car->ctrl.accelCmd = 0.0;
+			car->ctrl.brakeCmd = totalArc();
+		}
 
 		return true;
 	}
@@ -76,6 +96,8 @@ public:
 		angle = RtTrackSideTgAngleL(&(car->_trkPos)) - car->_yaw;
 		NORM_PI_PI(angle); // put the angle back in the range from -PI to PI
 		angle -= SC*car->_trkPos.toMiddle/car->_trkPos.seg->width;
+
+		car->ctrl.steer = angle / car->_steerLock;
 
 		return true;
 	}

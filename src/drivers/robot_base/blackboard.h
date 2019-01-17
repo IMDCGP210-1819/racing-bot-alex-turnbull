@@ -7,6 +7,8 @@
 #include <robottools.h>
 #include <robot.h>
 
+#include <list>
+
 class blackboard
 {
 private:
@@ -27,6 +29,4 @@ public:
 
 
 	tCarElt* car;
-
 };
-
