@@ -9,12 +9,10 @@
 
 class blackboard
 {
-public:
-	blackboard();
-	~blackboard();
-
+private:
 	static blackboard* _instance;
 
+public:	
 	static blackboard* Instance()
 	{
 		if (!_instance)
@@ -22,7 +20,11 @@ public:
 			_instance = new blackboard;
 		}
 		return _instance;
-	}	
+	}
+
+	blackboard();
+	~blackboard();
+
 
 	tCarElt* car;
 

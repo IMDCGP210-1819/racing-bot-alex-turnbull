@@ -34,6 +34,7 @@
 #include <iostream>
 
 #include "behaviourTree.h"
+#include "blackboard.h"
 
 static tTrack	*curTrack;
 
@@ -111,7 +112,7 @@ initTrack(int index, tTrack* track, void *carHandle, void **carParmHandle, tSitu
 static void  
 newrace(int index, tCarElt* car, tSituation *s) 
 { 
-
+	blackboard::Instance()->car = car;
 	//while (!root->run())
 	//	std::cout << "--------------------" << std::endl;
 	//std::cout << std::endl << "Operation complete.  Behaviour tree exited." << std::endl;
