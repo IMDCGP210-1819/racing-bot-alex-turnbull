@@ -33,6 +33,8 @@
 
 #include <iostream>
 
+#include "behaviourTree.h"
+
 static tTrack	*curTrack;
 
 static void initTrack(int index, tTrack* track, void *carHandle, void **carParmHandle, tSituation *s); 
@@ -41,6 +43,25 @@ static void drive(int index, tCarElt* car, tSituation *s);
 static void endrace(int index, tCarElt *car, tSituation *s);
 static void shutdown(int index);
 static int  InitFuncPt(int index, void *pt); 
+Sequence *root;
+
+static auto createTree()
+{
+	Sequence *root = new Sequence, *sequence1 = new Sequence;
+
+	Accelerate *accelerate1 = new Accelerate();
+	Brake *brake1 = new Brake();
+	Turn *turn1 = new Turn();
+	ChangeGear *changegear1 = new ChangeGear();
+
+	root->addChild(sequence1);
+	sequence1->addChild(accelerate1);
+	sequence1->addChild(brake1);
+	sequence1->addChild(turn1);
+	sequence1->addChild(changegear1);
+	return root;
+
+}
 
 
 /* 
@@ -74,6 +95,7 @@ InitFuncPt(int index, void *pt)
     itf->rbEndRace  = endrace;	 /* End of the current race */
     itf->rbShutdown = shutdown;	 /* Called before the module is unloaded */
     itf->index      = index; 	 /* Index used if multiple interfaces */
+	root = createTree();
     return 0; 
 } 
 
@@ -89,7 +111,12 @@ initTrack(int index, tTrack* track, void *carHandle, void **carParmHandle, tSitu
 static void  
 newrace(int index, tCarElt* car, tSituation *s) 
 { 
-} 
+
+	//while (!root->run())
+	//	std::cout << "--------------------" << std::endl;
+	//std::cout << std::endl << "Operation complete.  Behaviour tree exited." << std::endl;
+
+}
 
 /* Drive during race. */
 static void  
@@ -97,65 +124,68 @@ drive(int index, tCarElt* car, tSituation *s)
 { 
 	memset((void *)&car->ctrl, 0, sizeof(tCarCtrl));
 
-	//car->ctrl.gear = 1;
+	if (root->run()) {}
 
-	
+	////car->ctrl.gear = 1;
 
- //   car->ctrl.accelCmd = 1.0;
-	//if(car->pub.trkPos.toMiddle > 0)
-	//{
-	//	car->ctrl.steer = -0.1;
-	//}
-	//else
-	//{
-	//	car->ctrl.steer = 0.1;
-	//}
+
+
+ ////   car->ctrl.accelCmd = 1.0;
+	////if(car->pub.trkPos.toMiddle > 0)
+	////{
+	////	car->ctrl.steer = -0.1;
+	////}
+	////else
+	////{
+	////	car->ctrl.steer = 0.1;
+	////}
+	////std::cout << "-----------------------" << std::endl;
+	////std::cout << car->pub.trkPos.type << std::endl;
+	////std::cout << car->pub.trkPos.toMiddle << std::endl;
+	////std::cout << car->pub.speed << std::endl;
+	////std::cout << "-----------------------" << std::endl;
+
+	//float angle;
+ //   const float SC = 1.0;
+
+ //   angle = RtTrackSideTgAngleL(&(car->_trkPos)) - car->_yaw;
+ //   NORM_PI_PI(angle); // put the angle back in the range from -PI to PI
+ //   angle -= SC*car->_trkPos.toMiddle/car->_trkPos.seg->width;
+
+ //   // set up the values to return
 	//std::cout << "-----------------------" << std::endl;
-	//std::cout << car->pub.trkPos.type << std::endl;
-	//std::cout << car->pub.trkPos.toMiddle << std::endl;
+	//std::cout << car->_steerLock << std::endl;
+	//std::cout << angle << std::endl;
 	//std::cout << car->pub.speed << std::endl;
+	//std::cout << car->_trkPos.seg->next->type << std::endl;
+	//std::cout << car->_trkPos.seg->arc << std::endl;
 	//std::cout << "-----------------------" << std::endl;
 
-	float angle;
-    const float SC = 1.0;
+	//float speed = car->pub.speed;
 
-    angle = RtTrackSideTgAngleL(&(car->_trkPos)) - car->_yaw;
-    NORM_PI_PI(angle); // put the angle back in the range from -PI to PI
-    angle -= SC*car->_trkPos.toMiddle/car->_trkPos.seg->width;
-
-    // set up the values to return
-	std::cout << "-----------------------" << std::endl;
-	std::cout << car->_steerLock << std::endl;
-	std::cout << angle << std::endl;
-	std::cout << car->pub.speed << std::endl;
-	std::cout << car->_trkPos.seg->next->arc << std::endl;
-	std::cout << "-----------------------" << std::endl;
-
-	float speed = car->pub.speed;
-
-    car->ctrl.steer = angle / car->_steerLock;
-    car->ctrl.gear = 1; // first gear
-	if (speed > 15)
-	{
-		car->ctrl.gear = 2;
-	}if (speed > 30)
-	{
-		car->ctrl.gear = 3;
-	}if (speed > 40)
-	{
-		car->ctrl.gear = 4;
-	}if(speed > 50)
-	{
-		car->ctrl.gear = 5;
-	}if(speed > 60)
-	{
-		car->ctrl.gear = 6;
-	}
-    car->ctrl.accelCmd = 0.5; // 30% accelerator pedal
-	if(speed > 35 && car->_trkPos.seg->next->type == 1)
-		car->ctrl.accelCmd = 0.0;
-		car->ctrl.brakeCmd = 0.3;
-    car->ctrl.brakeCmd = 0.0; // no brakes
+ //   car->ctrl.steer = angle / car->_steerLock;
+ //   car->ctrl.gear = 1; // first gear
+	//if (speed > 15)
+	//{
+	//	car->ctrl.gear = 2;
+	//}if (speed > 30)
+	//{
+	//	car->ctrl.gear = 3;
+	//}if (speed > 40)
+	//{
+	//	car->ctrl.gear = 4;
+	//}if(speed > 50)
+	//{
+	//	car->ctrl.gear = 5;
+	//}if(speed > 60)
+	//{
+	//	car->ctrl.gear = 6;
+	//}
+ //   car->ctrl.accelCmd = 0.4; // 30% accelerator pedal
+	//if(speed > 30 && car->_trkPos.seg->next->type != 3)
+	//	car->ctrl.accelCmd = 0.0;
+	//	car->ctrl.brakeCmd = calculateBraking(speed,car->_trkPos.seg->next->arc);
+ //   car->ctrl.brakeCmd = 0.0; // no brakes
 
 	
 
@@ -181,4 +211,3 @@ static void
 shutdown(int index)
 {
 }
-

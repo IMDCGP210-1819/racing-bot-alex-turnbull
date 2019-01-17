@@ -1,6 +1,8 @@
 #include <iostream>
 #include <list>
 
+#include "blackboard.h"
+
 
 class Node {
 public:
@@ -36,17 +38,6 @@ public:
 		return true;
 	}
 };
-
-int main() {
-	Sequence *root = new Sequence, *sequence1 = new Sequence;
-	Selector* selector1 = new Selector;
-	root->addChild(selector1);
-	selector1->addChild(sequence1);
-
-	while (!root->run())
-		std::cout << "--------------------" << std::endl;
-	std::cout << std::endl << "Operation complete.  Behaviour tree exited." << std::endl;
-}
 
 class Accelerate : public Node {
 public:

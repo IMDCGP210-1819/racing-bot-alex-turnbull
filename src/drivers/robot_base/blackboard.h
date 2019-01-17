@@ -9,6 +9,7 @@
 
 class blackboard
 {
+public:
 	blackboard();
 	~blackboard();
 
