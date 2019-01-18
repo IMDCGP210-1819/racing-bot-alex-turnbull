@@ -9,6 +9,7 @@
 
 #include <list>
 
+//define and create a single blackboard instance that the behaviour tree can access for values
 class blackboard
 {
 private:
