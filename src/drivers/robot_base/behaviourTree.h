@@ -3,6 +3,8 @@
 
 #include "blackboard.h"
 
+//basic implementation of a behaviour tree, not fully working as intended or as a BT typically would
+
 //function called by braking node to determine how much power to apply when approaching a corner
 static float calculateBraking()
 {

@@ -9,6 +9,8 @@
 
 #include <list>
 
+//basic blackboard implementation, not proper design
+
 //define and create a single blackboard instance that the behaviour tree can access for values
 class blackboard
 {
