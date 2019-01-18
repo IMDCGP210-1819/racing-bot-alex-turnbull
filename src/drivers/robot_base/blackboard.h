@@ -28,7 +28,7 @@ public:
 	blackboard();
 	~blackboard();
 
-
+	//define a variable to store the car/robot and hence it's controls
 	tCarElt* car;
 
 	int ticksSpentStuck = 0;
