@@ -29,4 +29,6 @@ public:
 
 
 	tCarElt* car;
+
+	int ticksSpentStuck = 0;
 };

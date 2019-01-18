@@ -48,18 +48,32 @@ Sequence *root;
 
 static auto createTree()
 {
-	Sequence *root = new Sequence, *sequence1 = new Sequence;
+	Sequence *root = new Sequence, *driveSequence = new Sequence;
+	Selector *selector1 = new Selector;
+	Sequence *stuckSequence = new Sequence();
 
-	Accelerate *accelerate1 = new Accelerate();
+	carStatus *status = new carStatus{false};
+
+	CheckIfStuck *checkStuck = new CheckIfStuck(status);
+	AttemptToUnstick *unstick1 = new AttemptToUnstick(status);
+	Accelerate *accelerate1 = new Accelerate(status);
 	Brake *brake1 = new Brake();
 	Turn *turn1 = new Turn();
 	ChangeGear *changegear1 = new ChangeGear();
 
-	root->addChild(sequence1);
-	sequence1->addChild(accelerate1);
-	sequence1->addChild(turn1);
-	sequence1->addChild(brake1);	
-	sequence1->addChild(changegear1);
+	root->addChild(selector1);
+
+	stuckSequence->addChild(checkStuck);
+	stuckSequence->addChild(unstick1);
+
+	selector1->addChild(stuckSequence);
+	selector1->addChild(driveSequence);	
+
+	driveSequence->addChild(accelerate1);
+	driveSequence->addChild(turn1);
+	driveSequence->addChild(brake1);
+	driveSequence->addChild(changegear1);
+
 	return root;
 
 }
@@ -113,9 +127,6 @@ static void
 newrace(int index, tCarElt* car, tSituation *s) 
 { 
 	blackboard::Instance()->car = car;
-	//while (!root->run())
-	//	std::cout << "--------------------" << std::endl;
-	//std::cout << std::endl << "Operation complete.  Behaviour tree exited." << std::endl;
 
 }
 
@@ -146,21 +157,10 @@ drive(int index, tCarElt* car, tSituation *s)
 	std::cout << angle << std::endl;
 	std::cout << car->pub.speed << std::endl;
 	std::cout << car->_trkPos.seg->next->type << std::endl;
-	std::cout << car->_trkPos.seg->arc << std::endl;
+	std::cout << car->race.curLapTime << std::endl;
+	std::cout << car->race.distRaced << std::endl;
 	std::cout << "-----------------------" << std::endl;
 
-
-	
-
-    /* 
-     * add the driving code here to modify the 
-     * car->_steerCmd 
-     * car->_accelCmd 
-     * car->_brakeCmd 
-     * car->_gearCmd 
-     * car->_clutchCmd 
-	 if (car->priv.enginerpm >= car->priv.enginerpmRedLine)
-     */ 
 }
 
 /* End of the current race */
