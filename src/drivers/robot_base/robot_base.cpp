@@ -46,8 +46,10 @@ static void shutdown(int index);
 static int  InitFuncPt(int index, void *pt); 
 Sequence *root;
 
+//function called to build the behaviour tree when the race/car is initialized
 static auto createTree()
 {
+	//declaring the nodes that will be needed/included in the behaviour tree
 	Sequence *root = new Sequence, *driveSequence = new Sequence;
 	Selector *selector1 = new Selector;
 	Sequence *stuckSequence = new Sequence();
@@ -60,7 +62,9 @@ static auto createTree()
 	Brake *brake1 = new Brake();
 	Turn *turn1 = new Turn();
 	ChangeGear *changegear1 = new ChangeGear();
+	
 
+	//building the tree by applying/connection the child nodes into the correct parents 
 	root->addChild(selector1);
 
 	stuckSequence->addChild(checkStuck);
@@ -110,7 +114,7 @@ InitFuncPt(int index, void *pt)
     itf->rbEndRace  = endrace;	 /* End of the current race */
     itf->rbShutdown = shutdown;	 /* Called before the module is unloaded */
     itf->index      = index; 	 /* Index used if multiple interfaces */
-	root = createTree();
+	root = createTree(); //create the behaviour tree
     return 0; 
 } 
 
@@ -126,6 +130,7 @@ initTrack(int index, tTrack* track, void *carHandle, void **carParmHandle, tSitu
 static void  
 newrace(int index, tCarElt* car, tSituation *s) 
 { 
+	//assign the car into the blackboard instance
 	blackboard::Instance()->car = car;
 
 }
@@ -136,7 +141,13 @@ drive(int index, tCarElt* car, tSituation *s)
 { 
 	memset((void *)&car->ctrl, 0, sizeof(tCarCtrl));
 
+	//execute the tree
 	if (root->run()) {}
+
+
+	//////////////////////////////
+	//Debugging Values
+
 
 	std::cout << "-----------------------" << std::endl;
 	std::cout << car->pub.trkPos.type << std::endl;
@@ -160,6 +171,7 @@ drive(int index, tCarElt* car, tSituation *s)
 	std::cout << car->race.curLapTime << std::endl;
 	std::cout << car->race.distRaced << std::endl;
 	std::cout << "-----------------------" << std::endl;
+	/////////////////////////////
 
 }
 
